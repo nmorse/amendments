@@ -3,10 +3,13 @@ import { Machine, assign } from 'xstate';
 export const amendmentMachine = Machine({
     id: 'amendment',
     initial: 'unaltered',
-    context: { accept: true },
+    context: {
+        accept: true,
+        originalText: 'Cellphone use while operating a care will be punnishable by $5000 fine.',
+        modifiedText: ''
+    },
     states: {
         unaltered: {
-            // type: 'final',
             entry: 'accepting',
             on: {
                 TABLE: 'tabled',
@@ -23,18 +26,22 @@ export const amendmentMachine = Machine({
         },
         forRetraction: {
             entry: 'accepting',
-            // type: 'final',
             on: { REVERT: "tabled" }
         },
         editing: {
-            entry: 'unaccepting',
+            entry: ['unaccepting', 'cp_orig_text'],
             on: {
                 REVERT: 'unaltered',
-                REVIEW: 'review'
+                REVIEW: 'review',
+                CHANGE: {
+                    actions: assign({
+                        modifiedText: (ctx, e) => e.value
+                    })
+                }
             }
         },
         review: {
-            entry: 'unaccepting',
+            entry: ['unaccepting'],
             on: {
                 REVERT: "unaltered", EDIT: 'editing',
                 VOTETOPASS: 'forApproval'
@@ -42,16 +49,17 @@ export const amendmentMachine = Machine({
         },
         forApproval: {
             entry: 'accepting',
-            // type: 'final',
-            accepting: true,
             on: { REVERT: "review" }
         }
     }
 }
-, {
-    actions: {
-      accepting: assign({ accept: true }),
-      unaccepting: assign({  accept: false })
+    , {
+        actions: {
+            accepting: assign({ accept: true }),
+            unaccepting: assign({ accept: false }),
+            cp_orig_text: assign((context) => ({
+                modifiedText: context.originalText
+            }))
+        }
     }
-  }
 );
