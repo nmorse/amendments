@@ -30,7 +30,6 @@ export const Amendment = () => {
         <InState state="review" current={current}>
           <div dangerouslySetInnerHTML={{ __html: diffText(current.context.originalText, current.context.modifiedText)}} />
         </InState>
-        diffText()
       </div>
       <div>
         <HandlesEvent event="REVERT" current={current}>
