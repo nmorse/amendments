@@ -43,7 +43,8 @@ export const amendmentMachine = Machine({
         review: {
             entry: ['unaccepting'],
             on: {
-                REVERT: "unaltered", EDIT: 'editing',
+                REVERT: "unaltered", 
+                EDIT: 'editing',
                 VOTETOPASS: 'forApproval'
             }
         },
