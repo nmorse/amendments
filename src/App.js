@@ -7,8 +7,10 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Amendment></Amendment>
+      Amendment Demo
       </header>
+      
+      <Amendment></Amendment>
     </div>
   );
 }

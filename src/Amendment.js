@@ -23,12 +23,12 @@ export const Amendment = () => {
     <div>
       <div>
         <InState state="editing" current={current}>
-          <input value={current.context.modifiedText}
+          <textarea 
             onChange={e => send("CHANGE", { value: e.target.value })}
-          />
+          children={current.context.modifiedText}></textarea>
         </InState>
         <InState state="review" current={current}>
-          <div dangerouslySetInnerHTML={{ __html: diffText(current.context.originalText, current.context.modifiedText)}} />
+          <div className="review" dangerouslySetInnerHTML={{ __html: diffText(current.context.originalText, current.context.modifiedText)}} />
         </InState>
       </div>
       <div>
