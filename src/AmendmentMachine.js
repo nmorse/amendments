@@ -35,7 +35,7 @@ export const amendmentMachine = Machine({
                 REVIEW: 'review',
                 CHANGE: {
                     actions: assign({
-                        modifiedText: (ctx, e) => e.value
+                        modifiedText: (ctx, e) => e ? e.value : ctx.modifiedText
                     })
                 }
             }
