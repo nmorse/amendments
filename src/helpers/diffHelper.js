@@ -9,8 +9,8 @@ export const diffText = (a, b) => {
   
     var d = dmp.diff_main(a, b);
   
-    // dmp.diff_cleanupSemantic(d);
+    dmp.diff_cleanupSemantic(d);
 
-    dmp.diff_cleanupEfficiency(d);
+    // dmp.diff_cleanupEfficiency(d);
     return dmp.diff_prettyHtml(d);
   }

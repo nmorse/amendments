@@ -1,20 +1,9 @@
 import React from 'react';
 import { useMachine } from '@xstate/react';
 import { amendmentMachine } from './AmendmentMachine';
-import { diffText } from './diffHelper'
+import { diffText } from './helpers/diffHelper'
+import { InState, HandlesEvent } from './helpers/xstateHelper'
 
-export function HandlesEvent({ children, event, current }) {
-  const expected = Array.isArray(event) ? event : [event];
-  return expected.some(expectedEvent => current.nextEvents.some(evt => (evt === expectedEvent)))
-    ? <span>{children}</span>
-    : null;
-};
-export function InState({ children, state, current }) {
-  const expected = Array.isArray(state) ? state : [state];
-  return expected.some(value => current.matches(value))
-    ? <div>{children}</div>
-    : null;
-};
 
 export const Amendment = () => {
   const [current, send] = useMachine(amendmentMachine);
