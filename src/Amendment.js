@@ -5,7 +5,7 @@ import { diffText } from './diffHelper'
 
 export function HandlesEvent({ children, event, current }) {
   const expected = Array.isArray(event) ? event : [event];
-  return expected.some(expectedEvent => current.nextEvents.some(ne => (ne === expectedEvent)))
+  return expected.some(expectedEvent => current.nextEvents.some(evt => (evt === expectedEvent)))
     ? <span>{children}</span>
     : null;
 };

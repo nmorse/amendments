@@ -1,6 +1,7 @@
 import { Machine, assign } from 'xstate';
 
-export const amendmentMachine = Machine({
+export 
+const amendmentMachine = Machine({
     id: 'amendment',
     initial: 'unaltered',
     context: {
@@ -35,7 +36,7 @@ export const amendmentMachine = Machine({
                 REVIEW: 'review',
                 CHANGE: {
                     actions: assign({
-                        modifiedText: (ctx, e) => e.value
+                        modifiedText: (ctx, e) => e ? e.value : ctx.modifiedText
                     })
                 }
             }
@@ -58,8 +59,8 @@ export const amendmentMachine = Machine({
         actions: {
             accepting: assign({ accept: true }),
             unaccepting: assign({ accept: false }),
-            cp_orig_text: assign((context) => ({
-                modifiedText: context.originalText
+            cp_orig_text: assign((ctx) => ({
+                modifiedText: ctx.modifiedText ? ctx.modifiedText : ctx.originalText
             }))
         }
     }
