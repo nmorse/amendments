@@ -13,15 +13,22 @@ export const Amendment = () => {
     <Box direction='row' flex overflow={{ horizontal: 'hidden' }}>
       <Box flex align='center' justify='center'>
         <Grid
-          rows={['medium']}
+          rows={['medium', "medium"]}
           columns={['large', 'small']}
           gap="small"
           areas={[
             { name: 'main', start: [0, 0], end: [0, 0] },
             { name: 'actions', start: [1, 0], end: [1, 0] },
+            { name: 'context', start: [0, 1], end: [0, 1] }
           ]}
         >
           <Box gridArea="main" background="light-5" pad="small">
+          <InState state="unaltered" current={current}>
+              <TextArea
+                onChange={e => send("CHANGE", { value: e.target.value })}
+                children={current.context.modifiedText}></TextArea>
+              <Button label="Save" onClick={() => send('REVIEW')} />
+            </InState>
             <InState state="editing" current={current}>
               <TextArea
                 onChange={e => send("CHANGE", { value: e.target.value })}
@@ -32,6 +39,7 @@ export const Amendment = () => {
               <div className="review" dangerouslySetInnerHTML={{ __html: diffText(current.context.originalText, current.context.modifiedText) }} />
             </InState>
           </Box>
+
           <Box gridArea="actions" background="light-2">
             <HandlesEvent event="REVERT" current={current}>
               <Button label="Discard All Changes" onClick={() => send('REVERT')} />
@@ -41,22 +49,9 @@ export const Amendment = () => {
             </HandlesEvent>
           </Box>
 
-        </Grid>
-          <div>
-          </div>
-          <div>
-          </div>
-
-      </Box>
-        <Box
-          width='medium'
-          background='light-2'
-          elevation='small'
-          align='center'
-          justify='center'
-        >
+          <Box gridArea="context" >
+          <pre>context: {JSON.stringify(current.context, null, " ")}</pre>
           <div>Now in state: {current.value}</div>
-          <code>context: {JSON.stringify(current.context, null, " ")}</code>
           <div>
             {
               current.nextEvents.map(evt =>
@@ -69,7 +64,10 @@ export const Amendment = () => {
               )
             }
           </div>
+          </Box>
+
+        </Grid>
         </Box>
-      </Box>
+        </Box>
       );
 }
