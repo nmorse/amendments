@@ -33,12 +33,12 @@ export
                 entry: 'unaccepting',
                 on: {
                     PROCEED: "unaltered",
-                    CANCEL: "amend.editing"
+                    CANCEL: "amend.history"
                 }
             },
             amend: {
                 on: {
-                    REVERT: 'warnRevert'
+                    REVERT: [{ target: 'unaltered', cond: 'isUnaltered' }, { target: 'warnRevert' }]
                 },
                 id: 'amend',
                 initial: 'editing',
@@ -64,6 +64,10 @@ export
                     forApproval: {
                         entry: 'accepting',
                         on: { REVERT: "review" }
+                    },
+                    history: {
+                        type: 'history',
+                        history: 'shallow' // optional; default is 'shallow'
                     }
                 }
             }
@@ -76,6 +80,9 @@ export
                 cp_orig_text: assign((ctx) => ({
                     modifiedText: ctx.originalText
                 }))
-            }
+            },
+            guards: {
+                isUnaltered: (ctx, e) => ctx.originalText === ctx.modifiedText
+              }
         }
     );
