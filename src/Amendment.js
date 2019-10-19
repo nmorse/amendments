@@ -3,7 +3,11 @@ import { useMachine } from "@xstate/react";
 import { amendmentMachine } from "./AmendmentMachine";
 import { diffText } from "./helpers/diffHelper";
 import { InState, HandlesEvent } from "./helpers/xstateHelper";
-import { Box, Button, Grid, TextArea, Paragraph, Heading } from "grommet";
+import { Box, 
+  Button, 
+  Grid, 
+  TextArea, Paragraph, Heading 
+} from "grommet";
 
 export const Amendment = () => {
   const [current, send] = useMachine(amendmentMachine);
@@ -28,7 +32,7 @@ export const Amendment = () => {
               <Button label="Edit" onClick={() => send("EDIT")} />
               <Button label="Table" onClick={() => send("TABLE")} />
             </InState>
-            <InState state="editing" current={current}>
+            <InState state="amend.editing" current={current}>
               <Heading margin="none">Edit this Amendment</Heading>
               <TextArea
                 onChange={e => send("CHANGE", { value: e.target.value })}
@@ -36,7 +40,38 @@ export const Amendment = () => {
               ></TextArea>
               <Button label="Save" onClick={() => send("REVIEW")} />
             </InState>
-            <InState state="review" current={current}>
+            <InState state="amend.review" current={current}>
+              <Heading margin="none">Review Changes</Heading>
+              <div
+                className="review"
+                dangerouslySetInnerHTML={{
+                  __html: diffText(
+                    current.context.originalText,
+                    current.context.modifiedText
+                  )
+                }}
+              />
+            </InState><InState state="warnRevert" current={current}>
+              <Heading margin="none">Delete All Changes</Heading>
+              <div
+                className="review"
+                dangerouslySetInnerHTML={{
+                  __html: diffText(
+                    current.context.originalText,
+                    current.context.modifiedText
+                  )
+                }}
+              />
+              <Button
+                label="Discard All Changes"
+                onClick={() => send("PROCEED")}
+              />
+              <Button
+              label="Cancel"
+              onClick={() => send("CANCEL")}
+            />
+            </InState>
+            <InState state="amend.forApproval" current={current}>
               <Heading margin="none">Review Changes</Heading>
               <div
                 className="review"
@@ -68,7 +103,7 @@ export const Amendment = () => {
 
           <Box gridArea="context">
             <pre>context: {JSON.stringify(current.context, null, " ")}</pre>
-            <div>Now in state: {current.value}</div>
+            <div>Now in state: {JSON.stringify(current.value)}</div>
             <div>
               {current.nextEvents.map(evt => (
                 <span>
