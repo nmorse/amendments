@@ -18,16 +18,10 @@ export
                 }
             },
             tabled: {
-                entry: 'unaccepting',
-                on: {
-                    REVERT: 'unaltered',
-                    VOTETOKILL: 'forRetraction'
-                }
-
-            },
-            forRetraction: {
                 entry: 'accepting',
-                on: { REVERT: "tabled" }
+                on: {
+                    REVERT: 'unaltered'
+                }
             },
             warnRevert: {
                 entry: 'unaccepting',
@@ -38,7 +32,8 @@ export
             },
             amend: {
                 on: {
-                    REVERT: [{ target: 'unaltered', cond: 'isUnaltered' }, { target: 'warnRevert' }]
+                    REVERT: [{ target: 'unaltered', cond: 'isUnaltered' },
+                    { target: 'warnRevert' }]
                 },
                 id: 'amend',
                 initial: 'editing',
@@ -63,7 +58,7 @@ export
                     },
                     forApproval: {
                         entry: 'accepting',
-                        on: { REVERT: "review" }
+                        on: { EDIT: "editing" }
                     },
                     history: {
                         type: 'history',

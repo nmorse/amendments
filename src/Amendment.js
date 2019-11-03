@@ -27,8 +27,8 @@ export const Amendment = () => {
         >
           <Box gridArea="main" background="light-5" pad="small">
             <InState state="unaltered" current={current}>
-              <Heading margin="none">Unaltered Text</Heading>
-              <Paragraph>{current.context.originalText}</Paragraph>
+              <Heading margin="none">For Amendment Consideration</Heading>
+              <p>{current.context.originalText}</p>
               <Button label="Edit" onClick={() => send("EDIT")} />
               <Button label="Table" onClick={() => send("TABLE")} />
             </InState>
@@ -42,7 +42,7 @@ export const Amendment = () => {
             </InState>
             <InState state="amend.review" current={current}>
               <Heading margin="none">Review Changes</Heading>
-              <div
+              <p
                 className="review"
                 dangerouslySetInnerHTML={{
                   __html: diffText(
@@ -51,7 +51,9 @@ export const Amendment = () => {
                   )
                 }}
               />
-            </InState><InState state="warnRevert" current={current}>
+              <Button label="Finilize for a vote" onClick={() => send("VOTETOPASS")} />
+            </InState>
+            <InState state="warnRevert" current={current}>
               <Heading margin="none">Delete All Changes</Heading>
               <div
                 className="review"
@@ -72,7 +74,8 @@ export const Amendment = () => {
             />
             </InState>
             <InState state="amend.forApproval" current={current}>
-              <Heading margin="none">Review Changes</Heading>
+              <Heading margin="none">Amendment Set for Vote</Heading>
+              <p>{current.context.modifiedText}</p>
               <div
                 className="review"
                 dangerouslySetInnerHTML={{
